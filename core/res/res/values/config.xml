@@ -6114,4 +6114,13 @@
     <!-- Whether we should persist the brightness value in nits for the default display even if
          the underlying display device changes. -->
     <bool name="config_persistBrightnessNitsForDefaultDisplay">false</bool>
+
+    <!-- this is only for sony xperia series for diming brightness during AOD,
+         force diming with config_aodScreenBrightnessDark and config_aodBrightnessSwitchToDark. -->
+    <bool name="config_useSomcDozeScreenBrightness">false</bool>
+    <integer name="config_aodBrightnessSwitchToBright">0</integer>
+    <integer name="config_aodBrightnessSwitchToDark">0</integer>
+    <integer name="config_aodScreenBrightnessBright">-1</integer>
+    <integer name="config_aodScreenBrightnessDark">-1</integer>
+    <integer name="config_aodScrimOpacity">-1</integer>
 </resources>

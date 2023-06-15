@@ -23,6 +23,7 @@ import static com.android.systemui.keyguard.WakefulnessLifecycle.WAKEFULNESS_GOI
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -83,6 +84,13 @@ public class DozeScreenBrightness extends BroadcastReceiver implements DozeMachi
     private final int[] mSensorToBrightness;
     private final int[] mSensorToScrimOpacity;
     private final int mScreenBrightnessDim;
+    private boolean mSomcEnable;
+    private int mBrightnessSwitchLuxToDark;
+    private int mBrightnessSwitchLuxToBright;
+    private int mAodBrightnessDark;
+    private int mAodBrightnessBright;
+    private int mAodScrimOpacity;
+    private int mLastAodBrightness;
 
     @DevicePostureController.DevicePostureInt
     private int mDevicePosture;
@@ -126,6 +134,12 @@ public class DozeScreenBrightness extends BroadcastReceiver implements DozeMachi
         mHandler = handler;
         mDozeLog = dozeLog;
         mSystemSettings = systemSettings;
+        mBrightnessSwitchLuxToDark = -1;
+        mBrightnessSwitchLuxToBright = -1;
+        mAodBrightnessDark = -1;
+        mAodBrightnessBright = -1;
+        mAodScrimOpacity = -1;
+        mLastAodBrightness = -1;
 
         mScreenBrightnessMinimumDimAmountFloat = context.getResources().getFloat(
                 R.dimen.config_screenBrightnessMinimumDimAmountFloat);
@@ -134,6 +148,18 @@ public class DozeScreenBrightness extends BroadcastReceiver implements DozeMachi
         mScreenBrightnessDim = alwaysOnDisplayPolicy.dimBrightness;
         mSensorToBrightness = alwaysOnDisplayPolicy.screenBrightnessArray;
         mSensorToScrimOpacity = alwaysOnDisplayPolicy.dimmingScrimArray;
+
+        Resources resources = context.getResources();
+        mSomcEnable = resources.getBoolean(R.bool.config_useSomcDozeScreenBrightness);
+
+        if (mSomcEnable) {
+            mBrightnessSwitchLuxToDark = resources.getInteger(R.integer.config_aodBrightnessSwitchToDark);
+            mBrightnessSwitchLuxToBright = resources.getInteger(R.integer.config_aodBrightnessSwitchToBright);
+            mAodBrightnessDark = resources.getInteger(R.integer.config_aodScreenBrightnessDark);
+            mAodBrightnessBright = resources.getInteger(R.integer.config_aodScreenBrightnessBright);
+            mAodScrimOpacity = resources.getInteger(R.integer.config_aodScrimOpacity);
+            mLastAodBrightness = mAodBrightnessBright;
+        }
 
         mDevicePostureController.addCallback(mDevicePostureCallback);
     }
@@ -194,16 +220,29 @@ public class DozeScreenBrightness extends BroadcastReceiver implements DozeMachi
             int sensorValue = mDebugBrightnessBucket == -1
                     ? mLastSensorValue : mDebugBrightnessBucket;
             int brightness = computeBrightness(sensorValue);
+            int computedBrightness;
+
+            if (mSomcEnable) {
+                computedBrightness = computeBrightnessSomc(sensorValue, mLastAodBrightness);
+            } else {
+                computedBrightness = computeBrightness(sensorValue);
+            }
+
             boolean brightnessReady = brightness > 0;
             if (brightnessReady) {
                 mDozeService.setDozeScreenBrightness(
                         clampToDimBrightnessForScreenOff(clampToUserSetting(brightness)));
+                if (mSomcEnable) {
+                    mLastAodBrightness = computedBrightness;
+                }
             }
 
             int scrimOpacity = -1;
             if (!isLightSensorPresent()) {
                 // No light sensor, scrims are always transparent.
                 scrimOpacity = 0;
+            } else if (mSomcEnable) {
+                scrimOpacity = computeScrimOpacitySomc(sensorValue);
             } else if (brightnessReady) {
                 // Only unblank scrim once brightness is ready.
                 scrimOpacity = computeScrimOpacity(sensorValue);
@@ -212,6 +251,27 @@ public class DozeScreenBrightness extends BroadcastReceiver implements DozeMachi
                 mDozeHost.setAodDimmingScrim(scrimOpacity / 255f);
             }
         }
+    }
+
+    private int computeBrightnessSomc(int sensorValue, int lastAodBrightness) {
+        if (sensorValue < 0) {
+            return -1;
+        }
+
+        int aodBrightnessDark = mAodBrightnessDark;
+
+        if (lastAodBrightness != aodBrightnessDark || mBrightnessSwitchLuxToBright >= sensorValue) {
+            return mAodBrightnessDark;
+        }
+
+        return mAodBrightnessBright;
+    }
+
+    private int computeScrimOpacitySomc(int sensorValue) {
+        if (sensorValue < 0) {
+            return -1;
+        }
+        return mAodScrimOpacity;
     }
 
     private boolean lightSensorSupportsCurrentPosture() {
@@ -254,9 +314,15 @@ public class DozeScreenBrightness extends BroadcastReceiver implements DozeMachi
     }
 
     private void resetBrightnessToDefault() {
-        mDozeService.setDozeScreenBrightness(
-                clampToDimBrightnessForScreenOff(
-                        clampToUserSetting(mDefaultDozeBrightness)));
+        if (mSomcEnable) {
+            mDozeService.setDozeScreenBrightness(
+                    clampToDimBrightnessForScreenOff(
+                            clampToUserSetting(mAodBrightnessDark)));
+        } else {
+            mDozeService.setDozeScreenBrightness(
+                    clampToDimBrightnessForScreenOff(
+                            clampToUserSetting(mDefaultDozeBrightness)));
+        }
         mDozeHost.setAodDimmingScrim(0f);
     }
     //TODO: brightnessfloat change usages to float.

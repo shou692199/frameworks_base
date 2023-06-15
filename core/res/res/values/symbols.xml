@@ -4913,4 +4913,11 @@
 
   <!-- Whether to show weather on the lockscreen by default. -->
   <java-symbol type="bool" name="config_lockscreenWeatherEnabledByDefault" />
+
+  <java-symbol type="bool" name="config_useSomcDozeScreenBrightness" />
+  <java-symbol type="integer" name="config_aodBrightnessSwitchToBright" />
+  <java-symbol type="integer" name="config_aodBrightnessSwitchToDark" />
+  <java-symbol type="integer" name="config_aodScreenBrightnessBright" />
+  <java-symbol type="integer" name="config_aodScreenBrightnessDark" />
+  <java-symbol type="integer" name="config_aodScrimOpacity" />
 </resources>
