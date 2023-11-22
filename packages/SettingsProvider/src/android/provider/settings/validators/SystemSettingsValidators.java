@@ -302,5 +302,78 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.SWIPE_TO_SCREENSHOT, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.ADAPTIVE_PLAYBACK_ENABLED, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.ADAPTIVE_PLAYBACK_TIMEOUT, NON_NEGATIVE_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.ZEN_ALLOW_LIGHTS, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.ZEN_PRIORITY_ALLOW_LIGHTS, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.BATTERY_LIGHT_ENABLED, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.BATTERY_LIGHT_FULL_CHARGE_DISABLED, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.BATTERY_LIGHT_PULSE, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.BATTERY_LIGHT_LOW_COLOR,
+                new InclusiveIntegerRangeValidator(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        VALIDATORS.put(System.BATTERY_LIGHT_MEDIUM_COLOR,
+                new InclusiveIntegerRangeValidator(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        VALIDATORS.put(System.BATTERY_LIGHT_FULL_COLOR,
+                new InclusiveIntegerRangeValidator(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        VALIDATORS.put(System.BATTERY_LIGHT_BRIGHTNESS_LEVEL, new InclusiveIntegerRangeValidator(1, 255));
+        VALIDATORS.put(System.BATTERY_LIGHT_BRIGHTNESS_LEVEL_ZEN, new InclusiveIntegerRangeValidator(1, 255));
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL, new InclusiveIntegerRangeValidator(1, 255));
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL_ZEN, new InclusiveIntegerRangeValidator(1, 255));
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_SCREEN_ON, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR,
+                new InclusiveIntegerRangeValidator(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON, NON_NEGATIVE_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF, NON_NEGATIVE_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_CALL_COLOR,
+                new InclusiveIntegerRangeValidator(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_CALL_LED_ON, NON_NEGATIVE_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_CALL_LED_OFF, NON_NEGATIVE_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_VMAIL_COLOR,
+                new InclusiveIntegerRangeValidator(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_VMAIL_LED_ON, NON_NEGATIVE_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_VMAIL_LED_OFF, NON_NEGATIVE_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(
+                System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES,
+                new Validator() {
+                    @Override
+                    public boolean validate(String value) {
+                        if (TextUtils.isEmpty(value)) {
+                            return true;
+                        }
+
+                        for (String packageValuesString : value.split("\\|")) {
+                            String[] packageValues = packageValuesString.split("=");
+                            if (packageValues.length != 2) {
+                                return false;
+                            }
+                            String packageName = packageValues[0];
+                            if (TextUtils.isEmpty(packageName)) {
+                                return false;
+                            }
+                            String[] values = packageValues[1].split(";");
+                            if (values.length != 3) {
+                                return false;
+                            }
+                            try {
+                                // values[0] is LED color
+                                if (!new InclusiveIntegerRangeValidator(Integer.MIN_VALUE, Integer.MAX_VALUE).validate(values[0])) {
+                                    return false;
+                                }
+                                // values[1] is the LED on time and should be non-negative
+                                if (!NON_NEGATIVE_INTEGER_VALIDATOR.validate(values[1])) {
+                                    return false;
+                                }
+                                // values[1] is the LED off time and should be non-negative
+                                if (!NON_NEGATIVE_INTEGER_VALIDATOR.validate(values[2])) {
+                                    return false;
+                                }
+                            } catch (NumberFormatException e) {
+                                return false;
+                            }
+                        }
+                        // if we make it all the way through then the data is considered valid
+                        return true;
+                    }
+                });
+        VALIDATORS.put(System.NOTIFICATION_LIGHT_COLOR_AUTO, BOOLEAN_VALIDATOR);
     }
 }

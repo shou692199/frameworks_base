@@ -6016,6 +6016,188 @@ public final class Settings {
         public static final String ADAPTIVE_PLAYBACK_TIMEOUT = "adaptive_playback_timeout";
 
         /**
+         * Whether the notification light will be allowed when in zen mode during downtime
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String ZEN_ALLOW_LIGHTS = "allow_lights";
+
+        /**
+         * Whether the notification light will be allowed when in zen priority mode during downtime
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String ZEN_PRIORITY_ALLOW_LIGHTS = "zen_priority_allow_lights";
+
+        /**
+         * Whether the battery light should be enabled (if hardware supports it)
+         * The value is boolean (1 or 0).
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String BATTERY_LIGHT_ENABLED = "battery_light_enabled";
+
+        /**
+         * Whether the battery LED should be disabled when the battery is fully charged.
+         * The value is boolean (1 or 0).
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String BATTERY_LIGHT_FULL_CHARGE_DISABLED =
+                "battery_light_full_charge_disabled";
+
+        /**
+         * Whether the battery LED should repeatedly flash when the battery is low
+         * on charge. The value is boolean (1 or 0).
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String BATTERY_LIGHT_PULSE = "battery_light_pulse";
+
+        /**
+         * What color to use for the battery LED while charging - low
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String BATTERY_LIGHT_LOW_COLOR = "battery_light_low_color";
+
+        /**
+         * What color to use for the battery LED while charging - medium
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String BATTERY_LIGHT_MEDIUM_COLOR = "battery_light_medium_color";
+
+        /**
+         * What color to use for the battery LED while charging - full
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String BATTERY_LIGHT_FULL_COLOR = "battery_light_full_color";
+
+        /**
+         * Contains the battery light maximum brightness to use.
+         * Values range from 1 to 255
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String BATTERY_LIGHT_BRIGHTNESS_LEVEL =
+                "battery_light_brightness_level";
+
+        /**
+         * Contains the battery light maximum brightness to use when Do Not
+         * Disturb is active.
+         * Values range from 1 to 255
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String BATTERY_LIGHT_BRIGHTNESS_LEVEL_ZEN =
+                "battery_light_brightness_level_zen";
+
+        /**
+         * Contains the notifications light maximum brightness to use.
+         * Values range from 1 to 255
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL =
+                "notification_light_brightness_level";
+
+        /**
+         * Contains the notifications light maximum brightness to use when Do Not
+         * Disturb is active.
+         * Values range from 1 to 255
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL_ZEN =
+                "notification_light_brightness_level_zen";
+
+        /**
+         * Whether to allow notifications with the screen on or DayDreams.
+         * The value is boolean (1 or 0). Default will always be false.
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_SCREEN_ON =
+                "notification_light_screen_on_enable";
+
+        /**
+         * What color to use for the notification LED by default
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR =
+                "notification_light_pulse_default_color";
+
+        /**
+         * How long to flash the notification LED by default
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON =
+                "notification_light_pulse_default_led_on";
+
+        /**
+         * How long to wait between flashes for the notification LED by default
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF =
+                "notification_light_pulse_default_led_off";
+
+        /**
+         * What color to use for the missed call notification LED
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_CALL_COLOR =
+                "notification_light_pulse_call_color";
+
+        /**
+         * How long to flash the missed call notification LED
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_CALL_LED_ON =
+                "notification_light_pulse_call_led_on";
+
+        /**
+         * How long to wait between flashes for the missed call notification LED
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_CALL_LED_OFF =
+                "notification_light_pulse_call_led_off";
+
+        /**
+         * What color to use for the voicemail notification LED
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_VMAIL_COLOR =
+                "notification_light_pulse_vmail_color";
+
+        /**
+         * How long to flash the voicemail notification LED
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_VMAIL_LED_ON =
+                "notification_light_pulse_vmail_led_on";
+
+        /**
+         * How long to wait between flashes for the voicemail notification LED
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_VMAIL_LED_OFF =
+                "notification_light_pulse_vmail_led_off";
+
+        /**
+         * Whether to use the custom LED values for the notification pulse LED.
+         * 0 = 0ff, 1 = on
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE =
+                "notification_light_pulse_custom_enable";
+
+        /**
+         * Which custom LED values to use for the notification pulse LED.
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES =
+                "notification_light_pulse_custom_values";
+
+        /**
+         * Whether we automatically generate notification LED colors or just
+         * use the boring default.
+         *
+         * @hide
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String NOTIFICATION_LIGHT_COLOR_AUTO =
+                "notification_light_color_auto";
+
+        /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
          * it to PRIVATE_SETTINGS below. Also add a validator that can validate
@@ -6093,6 +6275,30 @@ public final class Settings {
             PUBLIC_SETTINGS.add(SHOW_WEB_SUGGESTIONS);
             PUBLIC_SETTINGS.add(VIBRATE_WHEN_RINGING);
             PUBLIC_SETTINGS.add(APPLY_RAMPING_RINGER);
+            PUBLIC_SETTINGS.add(ZEN_ALLOW_LIGHTS);
+            PUBLIC_SETTINGS.add(ZEN_PRIORITY_ALLOW_LIGHTS);
+            PUBLIC_SETTINGS.add(BATTERY_LIGHT_ENABLED);
+            PUBLIC_SETTINGS.add(BATTERY_LIGHT_FULL_CHARGE_DISABLED);
+            PUBLIC_SETTINGS.add(BATTERY_LIGHT_PULSE);
+            PUBLIC_SETTINGS.add(BATTERY_LIGHT_LOW_COLOR);
+            PUBLIC_SETTINGS.add(BATTERY_LIGHT_MEDIUM_COLOR);
+            PUBLIC_SETTINGS.add(BATTERY_LIGHT_FULL_COLOR);
+            PUBLIC_SETTINGS.add(BATTERY_LIGHT_BRIGHTNESS_LEVEL);
+            PUBLIC_SETTINGS.add(BATTERY_LIGHT_BRIGHTNESS_LEVEL_ZEN);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL_ZEN);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_SCREEN_ON);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_CALL_COLOR);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_CALL_LED_ON);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_CALL_LED_OFF);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_VMAIL_COLOR);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_VMAIL_LED_ON);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_VMAIL_LED_OFF);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE);
+            PUBLIC_SETTINGS.add(NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES);
         }
 
         /**
@@ -6203,6 +6409,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SWIPE_TO_SCREENSHOT);
             PRIVATE_SETTINGS.add(ADAPTIVE_PLAYBACK_ENABLED);
             PRIVATE_SETTINGS.add(ADAPTIVE_PLAYBACK_TIMEOUT);
+            PRIVATE_SETTINGS.add(NOTIFICATION_LIGHT_COLOR_AUTO);
         }
         /**
          * These entries are considered common between the personal and the managed profile,

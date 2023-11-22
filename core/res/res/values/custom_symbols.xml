@@ -121,4 +121,10 @@
     <!-- Define device configs on boot -->
     <java-symbol type="array" name="global_device_configs_override" />
     <java-symbol type="array" name="device_configs_override" />
+
+    <!-- On-device lights (LED) capabilities -->
+    <java-symbol type="integer" name="config_deviceLightCapabilities" />
+
+    <!-- Notification light mappings -->
+    <java-symbol type="array" name="notification_light_package_mapping" />
 </resources>
